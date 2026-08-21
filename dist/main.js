@@ -132,10 +132,34 @@ export class UltraFabStudioApp {
         }
     }
 }
-// Bootstrap on DOM Loaded
+// Bootstrap on DOM Loaded or immediately if already interactive/complete
 if (typeof window !== "undefined") {
-    window.addEventListener("DOMContentLoaded", () => {
-        window.__ULTRAFAB_APP__ = new UltraFabStudioApp();
-    });
+    const bootstrap = () => {
+        if (!window.__ULTRAFAB_APP__) {
+            try {
+                window.__ULTRAFAB_APP__ = new UltraFabStudioApp();
+            }
+            catch (err) {
+                console.error("[UltraFab Studio] Fatal initialization error:", err);
+                const overlay = document.getElementById("loadingOverlay");
+                if (overlay) {
+                    overlay.innerHTML = `
+            <div class="p-6 text-center text-rose-400 font-sans max-w-sm">
+              <div class="text-base font-bold mb-2">3D Studio Initialization</div>
+              <div class="text-xs text-slate-300 mb-4">${err?.message || "WebGL initialization notice"}</div>
+              <button onclick="location.reload()" class="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-xs font-bold transition-colors">Reload Studio</button>
+            </div>
+          `;
+                }
+            }
+        }
+    };
+    if (document.readyState === "loading") {
+        window.addEventListener("DOMContentLoaded", bootstrap);
+    }
+    else {
+        // If DOM is already parsed (common with deferred/ES modules on mobile)
+        bootstrap();
+    }
 }
 //# sourceMappingURL=main.js.map

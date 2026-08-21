@@ -29,8 +29,8 @@ export class SceneManager {
 
   constructor(containerElement: HTMLElement) {
     this.container = containerElement;
-    this.width = containerElement.clientWidth;
-    this.height = containerElement.clientHeight;
+    this.width = containerElement.clientWidth || window.innerWidth || 800;
+    this.height = containerElement.clientHeight || window.innerHeight || 600;
 
     this.initScene();
     this.initLighting();
@@ -45,19 +45,22 @@ export class SceneManager {
     this.scene.background = new THREE.Color(0x060913); // Deep Antigravity Navy
 
     // 2. Perspective Camera (42° FOV for realistic architectural perspective)
-    this.camera = new THREE.PerspectiveCamera(42, this.width / this.height, 0.1, 100);
+    const aspect = (this.width && this.height) ? this.width / this.height : 1.6;
+    this.camera = new THREE.PerspectiveCamera(42, aspect, 0.1, 100);
     this.camera.position.set(4.8, 3.6, 6.2);
+
+    const isMobile = typeof navigator !== "undefined" && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
     // 3. WebGL Renderer with High-DPI Clamping & ACES Filmic Tone Mapping
     this.renderer = new THREE.WebGLRenderer({
-      antialias: true,
+      antialias: !isMobile,
       powerPreference: "high-performance",
       alpha: false,
     });
     this.renderer.setSize(this.width, this.height);
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2));
     this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.renderer.shadowMap.type = isMobile ? THREE.BasicShadowMap : THREE.PCFSoftShadowMap;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.3;
 
@@ -67,6 +70,7 @@ export class SceneManager {
     this.renderer.domElement.style.width = "100%";
     this.renderer.domElement.style.height = "100%";
     this.renderer.domElement.style.zIndex = "0";
+    this.renderer.domElement.style.touchAction = "none";
 
     this.container.appendChild(this.renderer.domElement);
   }
@@ -76,14 +80,17 @@ export class SceneManager {
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
     this.scene.add(ambientLight);
 
+    const isMobile = typeof navigator !== "undefined" && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const shadowSize = isMobile ? 1024 : 2048;
+
     // 2. Main Overhead Studio Spotlight (Cast Soft Shadows)
     const mainSpot = new THREE.SpotLight(0xffffff, 2.4);
     mainSpot.position.set(6, 9, 6);
     mainSpot.angle = Math.PI / 3.5;
     mainSpot.penumbra = 0.55;
     mainSpot.castShadow = true;
-    mainSpot.shadow.mapSize.width = 2048;
-    mainSpot.shadow.mapSize.height = 2048;
+    mainSpot.shadow.mapSize.width = shadowSize;
+    mainSpot.shadow.mapSize.height = shadowSize;
     mainSpot.shadow.bias = -0.0001;
     this.scene.add(mainSpot);
 
@@ -168,15 +175,27 @@ export class SceneManager {
       });
       this.resizeObserver.observe(this.container);
     }
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("resize", () => {
+        const w = this.container.clientWidth || window.innerWidth;
+        const h = this.container.clientHeight || window.innerHeight;
+        if (w > 0 && h > 0) {
+          this.handleResize(w, h);
+        }
+      });
+    }
   }
 
   public handleResize(width: number, height: number): void {
+    if (!width || !height || width <= 0 || height <= 0) return;
     this.width = width;
     this.height = height;
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(width, height);
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    const isMobile = typeof navigator !== "undefined" && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2));
   }
 
   /**
