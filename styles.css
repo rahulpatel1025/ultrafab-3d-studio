@@ -33,6 +33,23 @@ body {
   touch-action: pan-y;
 }
 
+/* iOS Safe Area Notch and Dynamic Island Support */
+header.app-header {
+  padding-top: max(0.65rem, env(safe-area-inset-top));
+  padding-left: max(0.75rem, env(safe-area-inset-left));
+  padding-right: max(0.75rem, env(safe-area-inset-right));
+  padding-bottom: 0.65rem;
+}
+
+.floating-safe-bottom {
+  bottom: max(1.25rem, env(safe-area-inset-bottom)) !important;
+  right: max(1rem, env(safe-area-inset-right)) !important;
+}
+
+.drawer-safe-bottom {
+  padding-bottom: max(2.5rem, env(safe-area-inset-bottom)) !important;
+}
+
 #canvasContainer {
   touch-action: none;
   -webkit-touch-callout: none;
