@@ -262,6 +262,23 @@ export class UIManager {
       });
     }
 
+    // Mobile Drawer Toggle Button
+    const mobileDrawerBtn = document.getElementById("btnMobileDrawer");
+    const closeMobileDrawerBtn = document.getElementById("btnCloseMobileDrawer");
+    const sidebar = document.getElementById("controlsSidebar");
+
+    if (mobileDrawerBtn && sidebar) {
+      mobileDrawerBtn.addEventListener("click", () => {
+        sidebar.classList.remove("translate-y-full");
+      });
+    }
+
+    if (closeMobileDrawerBtn && sidebar) {
+      closeMobileDrawerBtn.addEventListener("click", () => {
+        sidebar.classList.add("translate-y-full");
+      });
+    }
+
     // Fullscreen Toggle
     const fullscreenBtn = document.getElementById("btnFullscreen");
     if (fullscreenBtn) {
