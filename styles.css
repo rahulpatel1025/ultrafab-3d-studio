@@ -41,9 +41,13 @@ header.app-header {
   padding-bottom: 0.65rem;
 }
 
-.floating-safe-bottom {
-  bottom: max(1.25rem, env(safe-area-inset-bottom)) !important;
+.floating-safe-bottom-right {
+  position: fixed !important;
+  bottom: max(1.5rem, env(safe-area-inset-bottom)) !important;
   right: max(1rem, env(safe-area-inset-right)) !important;
+  left: auto !important;
+  top: auto !important;
+  z-index: 35 !important;
 }
 
 .drawer-safe-bottom {
