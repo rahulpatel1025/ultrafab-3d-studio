@@ -866,29 +866,118 @@ export class ModelGenerators {
     leftWall.receiveShadow = true;
     roomGroup.add(leftWall);
 
-    // Back Wall
-    const backWall = new THREE.Mesh(new THREE.BoxGeometry(5.8, 3.4, 0.15), this.materials.roomWallMat);
-    backWall.position.set(0, 1.7, -2.675);
-    backWall.receiveShadow = true;
-    roomGroup.add(backWall);
+    // Back Wall with True Recessed Architectural Window Cutout Opening (Image 1)
+    const wallThick = 0.15;
+    const wallZ = -2.675;
+    const winCenterX = 0.40;
+    const winWidth = 1.60;
+    const winBottomY = 1.55;
+    const winTopY = 2.95;
+    const winHeight = winTopY - winBottomY; // 1.40m
 
-    // Back Wall Window (Image 1)
+    // 1. Lower Wall Section (below window sill)
+    const wallLower = new THREE.Mesh(
+      new THREE.BoxGeometry(5.8, winBottomY, wallThick),
+      this.materials.roomWallMat
+    );
+    wallLower.position.set(0, winBottomY / 2, wallZ);
+    wallLower.receiveShadow = true;
+    roomGroup.add(wallLower);
+
+    // 2. Upper Wall Section (above window lintel)
+    const wallUpperHeight = 3.4 - winTopY;
+    const wallUpper = new THREE.Mesh(
+      new THREE.BoxGeometry(5.8, wallUpperHeight, wallThick),
+      this.materials.roomWallMat
+    );
+    wallUpper.position.set(0, winTopY + wallUpperHeight / 2, wallZ);
+    wallUpper.receiveShadow = true;
+    roomGroup.add(wallUpper);
+
+    // 3. Left Wall Side (between corner and window)
+    const leftSideWidth = 5.8 / 2 + winCenterX - winWidth / 2; // 2.5m
+    const leftSideCenterX = -2.9 + leftSideWidth / 2;
+    const wallSideL = new THREE.Mesh(
+      new THREE.BoxGeometry(leftSideWidth, winHeight, wallThick),
+      this.materials.roomWallMat
+    );
+    wallSideL.position.set(leftSideCenterX, (winBottomY + winTopY) / 2, wallZ);
+    wallSideL.receiveShadow = true;
+    roomGroup.add(wallSideL);
+
+    // 4. Right Wall Side (to the right of window)
+    const rightSideWidth = 5.8 / 2 - winCenterX - winWidth / 2; // 1.7m
+    const rightSideCenterX = 2.9 - rightSideWidth / 2;
+    const wallSideR = new THREE.Mesh(
+      new THREE.BoxGeometry(rightSideWidth, winHeight, wallThick),
+      this.materials.roomWallMat
+    );
+    wallSideR.position.set(rightSideCenterX, (winBottomY + winTopY) / 2, wallZ);
+    wallSideR.receiveShadow = true;
+    roomGroup.add(wallSideR);
+
+    // 5. Architectural Window Frame, Ledge Sill & Glazing Pane (Image 1)
     const winGroup = new THREE.Group();
-    winGroup.position.set(0.35, 2.35, -2.59);
+    winGroup.position.set(winCenterX, (winBottomY + winTopY) / 2, wallZ);
+    winGroup.userData = {
+      title: "Laboratory Exterior Glazed Window Aperture",
+      category: "Architectural Elements",
+      specs: "Double-Glazed Toughened Low-E Glass | Thermal Break Powder-Coated Aluminium Frame | External Daylight Ingress",
+      description: "Architectural exterior daylight window providing natural illumination and ambient light distribution across the laboratory workstation suite.",
+      oemCode: "UF-ARCH-WIN",
+    } as ComponentMetadata;
     roomGroup.add(winGroup);
 
-    const winFrame = new THREE.Mesh(
-      createRoundedBoxGeometry(1.6, 1.4, 0.04, 0.008, 2),
+    // Deep Bottom Sill (Protruding slightly into the room)
+    const sill = new THREE.Mesh(
+      createRoundedBoxGeometry(winWidth + 0.08, 0.04, 0.22, 0.006, 2),
       this.materials.mainMat
     );
-    winGroup.add(winFrame);
+    sill.position.set(0, -winHeight / 2, 0.04);
+    winGroup.add(sill);
 
-    const winGlass = new THREE.Mesh(
-      new THREE.PlaneGeometry(1.44, 1.24),
-      new THREE.MeshBasicMaterial({ color: 0x93c5fd, transparent: true, opacity: 0.65 })
+    // Window Outer Frame
+    const frameOuter = new THREE.Mesh(
+      createRoundedBoxGeometry(winWidth, winHeight, 0.08, 0.006, 2),
+      this.materials.mainMat
     );
-    winGlass.position.set(0, 0, 0.01);
-    winGroup.add(winGlass);
+    winGroup.add(frameOuter);
+
+    // Vertical Central Mullion
+    const vertMullion = new THREE.Mesh(
+      new THREE.BoxGeometry(0.024, winHeight - 0.04, 0.03),
+      this.materials.mainMat
+    );
+    vertMullion.position.set(0, 0, 0);
+    winGroup.add(vertMullion);
+
+    // Horizontal Transom Bar
+    const horizTransom = new THREE.Mesh(
+      new THREE.BoxGeometry(winWidth - 0.04, 0.024, 0.03),
+      this.materials.mainMat
+    );
+    horizTransom.position.set(0, 0.15, 0);
+    winGroup.add(horizTransom);
+
+    // Double-Glazed Glass Pane with Realistic Sky/Daylight Reflection
+    const glassMat = new THREE.MeshPhysicalMaterial({
+      color: 0xdbeafe,
+      transmission: 0.9,
+      opacity: 1.0,
+      transparent: true,
+      roughness: 0.04,
+      metalness: 0.1,
+      ior: 1.52,
+      thickness: 0.02,
+      reflectivity: 0.9,
+      clearcoat: 1.0,
+    });
+    const glassPane = new THREE.Mesh(
+      new THREE.BoxGeometry(winWidth - 0.04, winHeight - 0.04, 0.008),
+      glassMat
+    );
+    glassPane.position.set(0, 0, 0);
+    winGroup.add(glassPane);
 
     // Base Cabinetry Group
     const baseGroup = new THREE.Group();
