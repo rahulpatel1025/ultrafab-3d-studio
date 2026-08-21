@@ -171,22 +171,34 @@
         </div>
       </div>
 
-      <!-- Camera Angle Presets Toolbar (Top Right) -->
-      <div class="absolute top-3 right-3 z-10 flex items-center p-0.5 sm:p-1 rounded-xl glass-panel text-[10px] sm:text-xs font-semibold scale-90 sm:scale-100 origin-top-right">
-        <button data-camera-preset="iso" class="px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-brand-blue transition-colors font-bold">
-          3D Iso
-        </button>
-        <button data-camera-preset="front" class="px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-brand-blue transition-colors font-bold">
-          Front
-        </button>
-        <button data-camera-preset="top" class="px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-brand-blue transition-colors font-bold">
-          Top
-        </button>
-        <button data-camera-preset="side" class="hidden sm:block px-2.5 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-brand-blue transition-colors font-bold">
-          Side
-        </button>
-        <button data-camera-preset="eyeLevel" class="px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-brand-blue transition-colors font-bold">
-          Eye
+      <!-- Top Right Floating Action Cluster (Camera Presets + Mobile Tools & Finishes) -->
+      <div class="absolute top-3 right-3 z-20 flex flex-col items-end gap-1.5">
+        <!-- Camera Angle Presets Toolbar -->
+        <div class="flex items-center p-0.5 sm:p-1 rounded-xl glass-panel text-[10px] sm:text-xs font-semibold scale-90 sm:scale-100 origin-top-right">
+          <button data-camera-preset="iso" class="px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-brand-blue transition-colors font-bold">
+            3D Iso
+          </button>
+          <button data-camera-preset="front" class="px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-brand-blue transition-colors font-bold">
+            Front
+          </button>
+          <button data-camera-preset="top" class="px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-brand-blue transition-colors font-bold">
+            Top
+          </button>
+          <button data-camera-preset="side" class="hidden sm:block px-2.5 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-brand-blue transition-colors font-bold">
+            Side
+          </button>
+          <button data-camera-preset="eyeLevel" class="px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-brand-blue transition-colors font-bold">
+            Eye
+          </button>
+        </div>
+
+        <!-- Mobile Tools & Finishes Button (Directly below Camera View Options) -->
+        <button
+          id="btnMobileDrawer"
+          class="lg:hidden btn-interactive px-3.5 py-1.5 rounded-xl bg-brand-blue text-white text-[11px] font-extrabold shadow-lg border border-brand-cyan/40 backdrop-blur-md flex items-center gap-1.5 cursor-pointer active:scale-95 transition-all"
+        >
+          <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 text-brand-cyan pointer-events-none"></i>
+          <span class="pointer-events-none">Tools & Finishes</span>
         </button>
       </div>
 
@@ -213,17 +225,6 @@
       <div class="hidden sm:flex absolute bottom-4 left-1/2 -translate-x-1/2 z-10 text-[10px] font-semibold text-slate-400 glass-panel px-3.5 py-1.5 rounded-full pointer-events-none items-center gap-2">
         <i data-lucide="mouse-pointer" class="w-3 h-3 text-brand-cyan"></i>
         <span>Touch/Drag: 360° Orbit | Pinch: Zoom | Tap Parts to Inspect</span>
-      </div>
-
-      <!-- Mobile Floating Tools & Drawer Trigger Button (Bottom Right Free Space) -->
-      <div class="lg:hidden floating-safe-bottom-right">
-        <button
-          id="btnMobileDrawer"
-          class="btn-interactive px-4 py-2.5 rounded-full bg-brand-blue text-white text-xs font-extrabold shadow-2xl border border-brand-cyan/40 backdrop-blur-md flex items-center gap-2 cursor-pointer active:scale-95"
-        >
-          <i data-lucide="sliders-horizontal" class="w-4 h-4 text-brand-cyan pointer-events-none"></i>
-          <span class="pointer-events-none">Tools & Finishes</span>
-        </button>
       </div>
 
     </div>
