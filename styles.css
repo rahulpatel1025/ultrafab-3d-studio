@@ -1,0 +1,161 @@
+/* 
+ * UltraFab 3D Laboratory Studio - styles.css
+ * Antigravity Glassmorphism, Spatial Depth, and Micro-Interactions
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
+
+:root {
+  --brand-navy: #060913;
+  --brand-blue: #00529B;
+  --brand-cyan: #38bdf8;
+  --brand-emerald: #10b981;
+  --glass-bg: rgba(15, 23, 42, 0.72);
+  --glass-border: rgba(56, 189, 248, 0.2);
+  --glass-glow: 0 8px 32px 0 rgba(0, 82, 155, 0.25);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--brand-navy);
+  color: #f1f5f9;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Antigravity Glassmorphic Panels */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-glow), 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.glass-panel-subtle {
+  background: rgba(30, 41, 59, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Glowing Neon Badges */
+.badge-neon-blue {
+  background: rgba(0, 82, 155, 0.25);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+}
+
+.badge-neon-emerald {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  box-shadow: 0 0 12px rgba(52, 211, 153, 0.2);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.8);
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--brand-blue);
+}
+
+/* Interactive Hover Micro-Animations */
+.btn-interactive {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-interactive:hover {
+  transform: translateY(-1.5px);
+  box-shadow: 0 6px 20px rgba(56, 189, 248, 0.25);
+}
+.btn-interactive:active {
+  transform: translateY(0.5px);
+}
+
+/* Shimmer Loading Animation */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.shimmer-effect {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer-effect::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.1) 20%,
+    rgba(255, 255, 255, 0.2) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite;
+}
+
+/* Glassmorphic UI Skeleton Shimmer System */
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-loading {
+  position: relative;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
+
+.skeleton-loading::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  background: linear-gradient(
+    90deg,
+    rgba(15, 23, 42, 0.7) 0%,
+    rgba(56, 189, 248, 0.25) 50%,
+    rgba(15, 23, 42, 0.7) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s infinite linear;
+  border-radius: inherit;
+  backdrop-filter: blur(8px);
+}
+
+.skeleton-pulse {
+  animation: skeleton-pulse-fade 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes skeleton-pulse-fade {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
