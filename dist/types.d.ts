@@ -17,7 +17,9 @@ export interface ComponentMetadata {
     description: string;
     oemCode: string;
     explodeOffset?: ExplodeOffset;
+    explodeRotation?: ExplodeOffset;
     originPos?: THREE.Vector3;
+    originRot?: THREE.Euler;
     originalOpacity?: number | number[];
     originalTransparent?: boolean | boolean[];
 }

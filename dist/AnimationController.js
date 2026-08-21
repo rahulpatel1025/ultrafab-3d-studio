@@ -73,9 +73,12 @@ export class AnimationController {
         if (!modelRoot)
             return;
         modelRoot.traverse((child) => {
-            if (child.userData && child.userData.explodeOffset) {
-                if (!child.userData.originPos) {
+            if (child.userData) {
+                if (child.userData.explodeOffset && !child.userData.originPos) {
                     child.userData.originPos = child.position.clone();
+                }
+                if (child.userData.explodeRotation && !child.userData.originRot) {
+                    child.userData.originRot = child.rotation.clone();
                 }
             }
         });
@@ -87,10 +90,17 @@ export class AnimationController {
                 onUpdate: () => {
                     const t = this.explodeProgress.value;
                     modelRoot.traverse((child) => {
-                        if (child.userData && child.userData.explodeOffset && child.userData.originPos) {
-                            const orig = child.userData.originPos;
-                            const off = child.userData.explodeOffset;
-                            child.position.set(orig.x + off.x * t, orig.y + off.y * t, orig.z + off.z * t);
+                        if (child.userData) {
+                            if (child.userData.explodeOffset && child.userData.originPos) {
+                                const orig = child.userData.originPos;
+                                const off = child.userData.explodeOffset;
+                                child.position.set(orig.x + off.x * t, orig.y + off.y * t, orig.z + off.z * t);
+                            }
+                            if (child.userData.explodeRotation && child.userData.originRot) {
+                                const origR = child.userData.originRot;
+                                const rotOff = child.userData.explodeRotation;
+                                child.rotation.set(origR.x + rotOff.x * t, origR.y + rotOff.y * t, origR.z + rotOff.z * t);
+                            }
                         }
                     });
                 },
@@ -100,10 +110,17 @@ export class AnimationController {
             this.explodeProgress.value = targetValue;
             const t = targetValue;
             modelRoot.traverse((child) => {
-                if (child.userData && child.userData.explodeOffset && child.userData.originPos) {
-                    const orig = child.userData.originPos;
-                    const off = child.userData.explodeOffset;
-                    child.position.set(orig.x + off.x * t, orig.y + off.y * t, orig.z + off.z * t);
+                if (child.userData) {
+                    if (child.userData.explodeOffset && child.userData.originPos) {
+                        const orig = child.userData.originPos;
+                        const off = child.userData.explodeOffset;
+                        child.position.set(orig.x + off.x * t, orig.y + off.y * t, orig.z + off.z * t);
+                    }
+                    if (child.userData.explodeRotation && child.userData.originRot) {
+                        const origR = child.userData.originRot;
+                        const rotOff = child.userData.explodeRotation;
+                        child.rotation.set(origR.x + rotOff.x * t, origR.y + rotOff.y * t, origR.z + rotOff.z * t);
+                    }
                 }
             });
         }

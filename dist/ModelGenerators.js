@@ -195,31 +195,69 @@ export class ModelGenerators {
         carcass.castShadow = true;
         carcass.receiveShadow = true;
         group.add(carcass);
+        const handleMat = this.materials.stainlessMat;
         // 2. Front Drawer Fascia (Vibrant Blue Finish)
         const drawerHeight = 0.18;
-        const drawerGeo = createRoundedBoxGeometry(width - 0.02, drawerHeight - 0.01, 0.02, 0.006, 3);
-        const drawerFascia = new THREE.Mesh(drawerGeo, this.materials.blueAccentMat);
-        drawerFascia.position.set(0, height - drawerHeight / 2 - 0.01, depth / 2 + 0.012);
-        drawerFascia.castShadow = true;
-        drawerFascia.userData = {
-            title: "Vibrant Blue Top Utility Drawer",
-            category: "Cabinetry Components",
-            specs: "Material: Double-Skin CRCA Sheet | Finish: RAL 5010 Epoxy Powder Coat",
-            description: "Smooth-gliding heavy-duty top utility drawer rated for 45kg static payload with ergonomic stainless steel D-handle.",
-            oemCode: "UF-DRW-BLU",
-            explodeOffset: { x: 0, y: 0, z: 0.35 },
-        };
-        group.add(drawerFascia);
-        // Drawer Stainless D-Handle
-        const handleGeo = new THREE.CylinderGeometry(0.006, 0.006, width * 0.45, 12);
-        const handleMat = this.materials.stainlessMat;
-        const drawerHandle = new THREE.Mesh(handleGeo, handleMat);
-        drawerHandle.rotation.z = Math.PI / 2;
-        drawerHandle.position.set(0, 0, 0.018);
-        drawerFascia.add(drawerHandle);
+        const isDoubleDoor = width >= 0.75;
+        if (isDoubleDoor) {
+            const drwW = (width - 0.03) / 2;
+            const drwGeo = createRoundedBoxGeometry(drwW, drawerHeight - 0.01, 0.02, 0.006, 3);
+            // Left Drawer
+            const drwL = new THREE.Mesh(drwGeo, this.materials.blueAccentMat);
+            drwL.position.set(-drwW / 2 - 0.005, height - drawerHeight / 2 - 0.01, depth / 2 + 0.012);
+            drwL.castShadow = true;
+            drwL.userData = {
+                title: "Left Utility Blue Drawer",
+                category: "Cabinetry Components",
+                specs: "CRCA Sheet | RAL 5010 Blue | Soft-Close Slides",
+                description: "Smooth-gliding heavy-duty top utility drawer.",
+                oemCode: "UF-DRW-L",
+                explodeOffset: { x: 0, y: 0, z: 0.35 },
+            };
+            group.add(drwL);
+            const handleDrwL = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.006, drwW * 0.45, 12), handleMat);
+            handleDrwL.rotation.z = Math.PI / 2;
+            handleDrwL.position.set(0, 0, 0.018);
+            drwL.add(handleDrwL);
+            // Right Drawer
+            const drwR = new THREE.Mesh(drwGeo, this.materials.blueAccentMat);
+            drwR.position.set(drwW / 2 + 0.005, height - drawerHeight / 2 - 0.01, depth / 2 + 0.012);
+            drwR.castShadow = true;
+            drwR.userData = {
+                title: "Right Utility Blue Drawer",
+                category: "Cabinetry Components",
+                specs: "CRCA Sheet | RAL 5010 Blue | Soft-Close Slides",
+                description: "Smooth-gliding heavy-duty top utility drawer.",
+                oemCode: "UF-DRW-R",
+                explodeOffset: { x: 0, y: 0, z: 0.35 },
+            };
+            group.add(drwR);
+            const handleDrwR = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.006, drwW * 0.45, 12), handleMat);
+            handleDrwR.rotation.z = Math.PI / 2;
+            handleDrwR.position.set(0, 0, 0.018);
+            drwR.add(handleDrwR);
+        }
+        else {
+            const drawerGeo = createRoundedBoxGeometry(width - 0.02, drawerHeight - 0.01, 0.02, 0.006, 3);
+            const drawerFascia = new THREE.Mesh(drawerGeo, this.materials.blueAccentMat);
+            drawerFascia.position.set(0, height - drawerHeight / 2 - 0.01, depth / 2 + 0.012);
+            drawerFascia.castShadow = true;
+            drawerFascia.userData = {
+                title: "Vibrant Blue Top Utility Drawer",
+                category: "Cabinetry Components",
+                specs: "Material: Double-Skin CRCA Sheet | Finish: RAL 5010 Epoxy Powder Coat",
+                description: "Smooth-gliding heavy-duty top utility drawer rated for 45kg static payload with ergonomic stainless steel D-handle.",
+                oemCode: "UF-DRW-BLU",
+                explodeOffset: { x: 0, y: 0, z: 0.35 },
+            };
+            group.add(drawerFascia);
+            const drawerHandle = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.006, width * 0.45, 12), handleMat);
+            drawerHandle.rotation.z = Math.PI / 2;
+            drawerHandle.position.set(0, 0, 0.018);
+            drawerFascia.add(drawerHandle);
+        }
         // 3. Lower Doors (Single or Double Door)
         const doorHeight = height - drawerHeight - 0.04;
-        const isDoubleDoor = width >= 0.75;
         if (isDoubleDoor) {
             const doorW = (width - 0.03) / 2;
             const doorGeo = createRoundedBoxGeometry(doorW, doorHeight, 0.02, 0.006, 3);
@@ -232,7 +270,8 @@ export class ModelGenerators {
                 specs: "Hinges: 110° Opening Soft-Close Concealed European Hinges",
                 description: "Double-walled acoustic dampened door panel with magnetic latch and anti-corrosion chemical lining.",
                 oemCode: "UF-DOR-L",
-                explodeOffset: { x: -0.2, y: 0, z: 0.3 },
+                explodeOffset: { x: -0.12, y: 0, z: 0.20 },
+                explodeRotation: { x: 0, y: Math.PI / 2.6, z: 0 },
             };
             group.add(doorL);
             const handleL = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.006, 0.18, 12), handleMat);
@@ -247,7 +286,8 @@ export class ModelGenerators {
                 specs: "Hinges: 110° Opening Soft-Close Concealed European Hinges",
                 description: "Double-walled acoustic dampened door panel with magnetic latch.",
                 oemCode: "UF-DOR-R",
-                explodeOffset: { x: 0.2, y: 0, z: 0.3 },
+                explodeOffset: { x: 0.12, y: 0, z: 0.20 },
+                explodeRotation: { x: 0, y: -Math.PI / 2.6, z: 0 },
             };
             group.add(doorR);
             const handleR = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.006, 0.18, 12), handleMat);
@@ -265,7 +305,8 @@ export class ModelGenerators {
                 specs: "Concealed 3D Adjustable Soft-Close Hinges | Magnetic Catch",
                 description: "Heavy-duty single cabinet door with durable powder-coated finish.",
                 oemCode: "UF-DOR-S",
-                explodeOffset: { x: 0, y: 0, z: 0.3 },
+                explodeOffset: { x: 0.12, y: 0, z: 0.20 },
+                explodeRotation: { x: 0, y: -Math.PI / 2.6, z: 0 },
             };
             group.add(door);
             const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.006, 0.18, 12), handleMat);
@@ -394,7 +435,6 @@ export class ModelGenerators {
             specs: `Dimensions: ${Math.round(totalWidth * 1000)}W x ${Math.round(depth * 1000)}D x ${Math.round(height * 1000)}H mm | 5mm Toughened Glass Doors | Heavy-Duty Blue Anodized Framing`,
             description: "Ergonomic wall-mounted chemical and glassware storage suite featuring vibration-resistant glass doors framed in UltraFab vibrant blue powder-coated aluminium profiles, magnetic latches, and adjustable shelves.",
             oemCode: "UF-WSC-6GLS",
-            explodeOffset: { x: 0, y: 0.35, z: 0.25 },
         };
         const carcassGeo = createRoundedBoxGeometry(totalWidth, height, depth, 0.008, 3);
         const carcass = new THREE.Mesh(carcassGeo, this.materials.mainMat);
@@ -406,6 +446,16 @@ export class ModelGenerators {
             const doorX = -totalWidth / 2 + (i + 0.5) * unitWidth;
             const doorGroup = new THREE.Group();
             doorGroup.position.set(doorX, height / 2, depth / 2 + 0.008);
+            const isRightSide = i % 2 === 1;
+            doorGroup.userData = {
+                title: `Overhead Glass Cabinet Door #${i + 1}`,
+                category: "Overhead Cabinetry",
+                specs: "Blue Anodized Aluminium Frame | 5mm Toughened Glass | 110° European Hinges",
+                description: "Viewing glass door panel opening on soft-close European hinges.",
+                oemCode: `UF-WSC-DOOR-${i + 1}`,
+                explodeOffset: isRightSide ? { x: 0.10, y: 0, z: 0.20 } : { x: -0.10, y: 0, z: 0.20 },
+                explodeRotation: isRightSide ? { x: 0, y: -Math.PI / 2.6, z: 0 } : { x: 0, y: Math.PI / 2.6, z: 0 },
+            };
             group.add(doorGroup);
             const frameThickness = 0.024;
             const frameGeo = createRoundedBoxGeometry(unitWidth - 0.012, height - 0.016, 0.018, 0.004, 2);
@@ -425,7 +475,6 @@ export class ModelGenerators {
             doorGroup.add(glassMesh);
             const handleGeo = new THREE.CylinderGeometry(0.005, 0.005, 0.16, 12);
             const handleMesh = new THREE.Mesh(handleGeo, this.materials.stainlessMat);
-            const isRightSide = i % 2 === 1;
             handleMesh.position.set(isRightSide ? -unitWidth * 0.35 : unitWidth * 0.35, 0, 0.018);
             doorGroup.add(handleMesh);
         }
@@ -656,7 +705,6 @@ export class ModelGenerators {
             specs: "Footprint: 1050 x 1050 mm | Single Hinged Door | RAL 5010 Blue Top Drawer | Stainless D-Handle",
             description: "Ergonomic 45-degree angled corner workstation unit allowing continuous legroom and storage for L-shaped runs.",
             oemCode: "UF-CRN-45",
-            explodeOffset: { x: 0.25, y: -0.15, z: 0.25 },
         };
         baseGroup.add(cornerUnit);
         const cabShape = new THREE.Shape();
@@ -688,6 +736,14 @@ export class ModelGenerators {
         drwMesh.position.set(diagX + 0.015, 0.75, diagZ + 0.015);
         drwMesh.rotation.y = Math.PI / 4;
         drwMesh.castShadow = true;
+        drwMesh.userData = {
+            title: "45° Corner Top Utility Drawer",
+            category: "Cabinetry Components",
+            specs: "CRCA Sheet | RAL 5010 Blue | 45° Slide",
+            description: "Ergonomic 45-degree angled slide utility drawer.",
+            oemCode: "UF-DRW-CRN",
+            explodeOffset: { x: 0.25, y: 0, z: 0.25 },
+        };
         cornerUnit.add(drwMesh);
         const drwHandle = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.006, diagW * 0.45, 12), this.materials.stainlessMat);
         drwHandle.rotation.z = Math.PI / 2;
@@ -700,6 +756,15 @@ export class ModelGenerators {
         doorMesh.position.set(diagX + 0.015, 0.38, diagZ + 0.015);
         doorMesh.rotation.y = Math.PI / 4;
         doorMesh.castShadow = true;
+        doorMesh.userData = {
+            title: "45° Corner Base Cabinet Hinged Door",
+            category: "Cabinetry Components",
+            specs: "110° Concealed Hinges | Key Lock Cylinder",
+            description: "Corner access door swinging outward into the laboratory.",
+            oemCode: "UF-DOR-CRN",
+            explodeOffset: { x: 0.15, y: 0, z: 0.15 },
+            explodeRotation: { x: 0, y: -Math.PI / 2.6, z: 0 },
+        };
         cornerUnit.add(doorMesh);
         const doorHandle = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.006, 0.16, 12), this.materials.stainlessMat);
         doorHandle.position.set(diagW * 0.32, 0.12, 0.018);
@@ -772,7 +837,6 @@ export class ModelGenerators {
             specs: "Seamless Monolithic Epoxy Resin | 45° Chamfered Corner | SEFA 8M Compliant",
             description: "Continuous monolithic chemical workbench surface with 45° ergonomic corner transition.",
             oemCode: "UF-EPX-L45",
-            explodeOffset: { x: 0, y: 0.25, z: 0 },
         };
         worktopGroup.add(monolithicTop);
         // 5. Backsplash Electrical Raceways (Meeting in corner)
