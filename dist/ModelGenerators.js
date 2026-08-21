@@ -326,7 +326,6 @@ export class ModelGenerators {
             specs: `Footprint: ${Math.round(width * 1000)} x ${Math.round(width * 1000)} mm | Depth: ${Math.round(depth * 1000)} mm | Height: ${Math.round(height * 1000)} mm`,
             description: "Ergonomic 45-degree angled corner workstation base unit allowing uninterrupted legroom and maximum storage capacity for L-shaped and U-shaped laboratory runs.",
             oemCode: "UF-CRN-45",
-            explodeOffset: { x: 0.25, y: -0.15, z: 0.25 },
         };
         // Pentagon footprint in local coordinates [0, 0] to [width, width]
         const shape = new THREE.Shape();
@@ -360,6 +359,14 @@ export class ModelGenerators {
         drawerMesh.position.set(diagCenterX, height - 0.10, diagCenterZ);
         drawerMesh.rotation.y = -Math.PI / 4;
         drawerMesh.castShadow = true;
+        drawerMesh.userData = {
+            title: "45° Corner Top Utility Drawer",
+            category: "Cabinetry Components",
+            specs: "CRCA Sheet | RAL 5010 Blue",
+            description: "Ergonomic 45-degree slide utility drawer.",
+            oemCode: "UF-DRW-CRN",
+            explodeOffset: { x: 0.25, y: 0, z: 0.25 },
+        };
         group.add(drawerMesh);
         // Lower Door on 45° face
         const doorHeight = height - 0.24;
@@ -368,6 +375,15 @@ export class ModelGenerators {
         doorMesh.position.set(diagCenterX, doorHeight / 2 + 0.02, diagCenterZ);
         doorMesh.rotation.y = -Math.PI / 4;
         doorMesh.castShadow = true;
+        doorMesh.userData = {
+            title: "45° Corner Base Cabinet Hinged Door",
+            category: "Cabinetry Components",
+            specs: "110° Concealed Hinges | Key Lock Cylinder",
+            description: "Corner access door swinging outward.",
+            oemCode: "UF-DOR-CRN",
+            explodeOffset: { x: 0.15, y: 0, z: 0.15 },
+            explodeRotation: { x: 0, y: -Math.PI / 2.6, z: 0 },
+        };
         group.add(doorMesh);
         // Stainless D-Handle on door
         const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.006, 0.18, 12), this.materials.stainlessMat);
@@ -386,7 +402,6 @@ export class ModelGenerators {
             specs: `Length: ${Math.round(length * 1000)} mm | Profile: 140x80 mm Extruded Sheet / Aluminium | IP54 Dust & Splash Rated`,
             description: "Continuous modular service raceway finished in signature UltraFab blue with integrated 6/16A universal power sockets, dedicated MCB/ELCB breakers, and data/RJ45 communication ports.",
             oemCode: "UF-ERW-BLU",
-            explodeOffset: { x: 0, y: 0.15, z: -0.25 },
         };
         const bodyGeo = createRoundedBoxGeometry(length, height, depth, 0.006, 3);
         const body = new THREE.Mesh(bodyGeo, this.materials.blueAccentMat);
