@@ -172,3 +172,41 @@ canvas {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.45; }
 }
+
+/* Mobile Controls Drawer Styles */
+@media (max-width: 1023px) {
+  .mobile-drawer {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    max-height: 82vh !important;
+    z-index: 50 !important;
+    transform: translateY(105%) !important;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    will-change: transform;
+    border-top-left-radius: 1.5rem !important;
+    border-top-right-radius: 1.5rem !important;
+  }
+
+  .mobile-drawer.open {
+    transform: translateY(0%) !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .mobile-drawer {
+    transform: none !important;
+    position: relative !important;
+    max-height: 100% !important;
+  }
+}
+
+/* Hide Scrollbar for Horizontal Tab Bars */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

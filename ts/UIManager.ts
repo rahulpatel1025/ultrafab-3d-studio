@@ -262,21 +262,51 @@ export class UIManager {
       });
     }
 
-    // Mobile Drawer Toggle Button
+    // Mobile Drawer Toggle Button & Backdrop
     const mobileDrawerBtn = document.getElementById("btnMobileDrawer");
     const closeMobileDrawerBtn = document.getElementById("btnCloseMobileDrawer");
+    const backdrop = document.getElementById("mobileDrawerBackdrop");
     const sidebar = document.getElementById("controlsSidebar");
 
-    if (mobileDrawerBtn && sidebar) {
-      mobileDrawerBtn.addEventListener("click", () => {
-        sidebar.classList.remove("translate-y-full");
+    const openMobileDrawer = () => {
+      if (sidebar) sidebar.classList.add("open");
+      if (backdrop) backdrop.classList.remove("hidden");
+    };
+
+    const closeMobileDrawer = () => {
+      if (sidebar) sidebar.classList.remove("open");
+      if (backdrop) backdrop.classList.add("hidden");
+    };
+
+    if (mobileDrawerBtn) {
+      mobileDrawerBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openMobileDrawer();
+      });
+      mobileDrawerBtn.addEventListener("touchend", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openMobileDrawer();
       });
     }
 
-    if (closeMobileDrawerBtn && sidebar) {
-      closeMobileDrawerBtn.addEventListener("click", () => {
-        sidebar.classList.add("translate-y-full");
+    if (closeMobileDrawerBtn) {
+      closeMobileDrawerBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        closeMobileDrawer();
       });
+      closeMobileDrawerBtn.addEventListener("touchend", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        closeMobileDrawer();
+      });
+    }
+
+    if (backdrop) {
+      backdrop.addEventListener("click", closeMobileDrawer);
+      backdrop.addEventListener("touchend", closeMobileDrawer);
     }
 
     // Fullscreen Toggle
